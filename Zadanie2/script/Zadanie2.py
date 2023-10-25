@@ -55,6 +55,7 @@ class Symulacja:
         self.magnetyzacja = self.calc_magnetyzacja()
         if(job != None):
             job.update(task_init_ID, advance=1)
+            job.remove_task(task_init_ID)
         
     
     #funcja do liczenia hamiltonianu
@@ -104,7 +105,7 @@ class Symulacja:
                 job.remove_task(last_job_ID_makro)
 
             if(job != None):
-                makro_task_ID = job.add_task('[red]Makrokrok:', total=a*a)
+                makro_task_ID = job.add_task('[red]Makrokrok ' + str(krok) + ':', total=a*a)
                 last_job_ID_makro = makro_task_ID
             
 
@@ -186,7 +187,10 @@ class Symulacja:
 
 
 #funkcja do zapisywania obrazów
-def save_img(symulacja:Symulacja, krok:int, name:str = None):
+def save_img(symulacja:Symulacja, krok:int, name:str = None, job:progress.Progress = None, job_ID:progress.TaskID = None):
+    if(job != None):
+        job_img_ID = job.add_task('[yellow]Generowanie obrazu:', total=len(symulacja.siatka)*len(symulacja.siatka)+1)
+
     image = Image.new('1', (len(symulacja.siatka), len(symulacja.siatka)))
     for i in range(len(symulacja.siatka)):
         for j in range(len(symulacja.siatka)):
@@ -195,10 +199,25 @@ def save_img(symulacja:Symulacja, krok:int, name:str = None):
                 draw.point((i,j), fill=0)
             else:
                 draw.point((i,j), fill=1)
+            
+            if(job != None):
+                job.update(job_img_ID, advance=1)
+
+            if((job != None) & (job_ID != None)):
+                job.update(job_ID, advance=1)
 
     if(name != None):
         path=name+'_'+str(krok)+'.png'
         image.save(path)
+    
+    if(job != None):
+        job.update(job_img_ID, advance=1)
+                
+    if((job != None) & (job_ID != None)):
+        job.update(job_ID, advance=1)
+    
+    if(job != None):
+        job.remove_task(job_img_ID)
 
     return image
 
@@ -224,7 +243,10 @@ parser.add_argument('-fm', '--file_mag', help='Nazwa pliku z magnetyzacją', typ
 args = parser.parse_args()
 
 with progress.Progress() as job_progress:
-    taskID = job_progress.add_task('[green]Symulacja:', total=args.size*args.size*args.l_krok+args.l_krok+args.size*args.size*2+2)
+    total_it = args.size*args.size*args.l_krok+args.l_krok+args.size*args.size*2+2
+    if((args.file_img != None) | (args.file_anim != None)):
+        total_it += (args.size*args.size+1)*(args.l_krok+1)
+    taskID = job_progress.add_task('[green]Progress całości:', total=total_it)
 
     sym = Symulacja(args.size, args.wsp_J, args.wsp_beta, args.wsp_B, args.gestosc, job_progress, taskID)
 
@@ -236,7 +258,7 @@ with progress.Progress() as job_progress:
     print()
 
     if((args.file_img != None) | (args.file_anim != None)):
-        img_sequence_first = (save_img(sym, 0, args.file_img))
+        img_sequence_first = (save_img(sym, 0, args.file_img, job_progress, taskID))
     if(args.file_mag != None):
         file = open(args.file_mag, mode='xt')
         file.write('Krok:\tMagnetyzacja:\n')
@@ -257,7 +279,7 @@ with progress.Progress() as job_progress:
         print()
 
         if((args.file_img != None) | (args.file_anim != None)):
-            img_sequence.append(save_img(sym, i[0], args.file_img))
+            img_sequence.append(save_img(sym, i[0], args.file_img, job_progress, taskID))
         if(args.file_mag != None):
             file.write(str(i[0]) + '\t' + str(i[3]) + '\n')
         
