@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "pwzn-pb-lab3"
+version = "0.1.0"
+description = ""
+authors = ["Piotr Bienias"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.9,<3.11"
+numpy = "^1.26.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
