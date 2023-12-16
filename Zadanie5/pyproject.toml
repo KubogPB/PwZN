@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "pwzn-pb-z5"
+version = "0.1.0"
+description = "Python w zastosowaniach naukowych - Zadanie 5"
+authors = ["Piotr Bienias"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+beautifulsoup4 = "^4.12.2"
+requests = "^2.31.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
