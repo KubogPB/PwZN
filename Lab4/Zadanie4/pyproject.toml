@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "pwzn-pb-z4"
+version = "0.1.0"
+description = "Python w zastosowaniach naukowych - Zadanie 4"
+authors = ["Piotr Bienias"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+rich = "^13.7.0"
+Pillow = "^10.1.0"
+numba = "^0.58.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
