@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "pwzn-pb-z6"
+version = "0.1.0"
+description = "Python w zastosowaniach naukowych - Zadanie 6"
+authors = ["Piotr Bienias"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.9,<3.11"
+selenium = "^4.16.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
