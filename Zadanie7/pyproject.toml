@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "pwzn-pb-z7"
+version = "0.1.0"
+description = "Python w zastosowaniach naukowych - Zadanie 7"
+authors = ["Piotr Bienias"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.9,<3.11"
+numpy = "^1.26.3"
+matplotlib = "^3.8.2"
+SciPy = "^1.11.4"
+
+
+[tool.poetry.group.dev.dependencies]
+ipykernel = "^6.28.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
